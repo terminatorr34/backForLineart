@@ -4,6 +4,7 @@ import mongoose from 'mongoose'
 import Post from '../back/post.js'
 import cors from 'cors'
 import fileUpload  from 'express-fileupload'
+import fileService from './fileService.js'
 
 
 console.log('hello')
@@ -33,10 +34,13 @@ app.post('/', async (req, res) => {
   if (!req.body) return res.status(400).json('нет данных')
   try {
     const { userName, phone, mail, photo, inputTextArea, inputCheckbox, order } = req.body
-    const post = await Post.create({ userName, phone, mail, photo, inputTextArea, inputCheckbox, order }, photo)
-    console.log("---", req.body);
-    console.log(req.files);
-    res.json(req.body)
+    const fileName = fileService.saveFile(req.files.photo)
+    
+    const post = await Post.create({ userName, phone, mail, photo, inputTextArea, inputCheckbox, order, photo:fileName })
+    console.log("---", post);
+    // console.log(req.files);
+    res.json(post)
+    // res.json(req.files)
   }
 
   catch (e) {
