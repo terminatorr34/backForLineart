@@ -3,7 +3,7 @@ import multer from 'multer'
 import mongoose from 'mongoose'
 import Post from '../back/post.js'
 import cors from 'cors'
-
+import fileUpload  from 'express-fileupload'
 
 
 console.log('hello')
@@ -15,6 +15,7 @@ app.use(express.json())
 // app.use(express.text())
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(fileUpload({}))
 app.set("view engine", "ejs")
 mongoose.set('strictQuery', false)
 async function startUP() {
@@ -28,12 +29,13 @@ async function startUP() {
 }
 startUP()
 
-app.post('/', upload.single('photo'), async (req, res) => {
+app.post('/', async (req, res) => {
   if (!req.body) return res.status(400).json('нет данных')
   try {
     const { userName, phone, mail, photo, inputTextArea, inputCheckbox, order } = req.body
-    const post = await Post.create({ userName, phone, mail, photo, inputTextArea, inputCheckbox, order })
+    const post = await Post.create({ userName, phone, mail, photo, inputTextArea, inputCheckbox, order }, photo)
     console.log("---", req.body);
+    console.log(req.files);
     res.json(req.body)
   }
 
