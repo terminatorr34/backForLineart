@@ -38,7 +38,14 @@ app.post('/', async (req, res) => {
   if (!req.body) return res.status(400).json('нет данных')
   try {
     const { userName, phone, mail, photo, inputTextArea, inputCheckbox, order } = req.body
-    
+    const message = {
+      from: 'Test NodeMailer',
+      to: req.body.mail,
+      subject: 'testing 1234',
+      text: 'userName: ' + req.body.userName + 'phone: ' + req.body.phone + 'comments: ' + req.body.inputTextArea + 'thank you. we contact you ASAP'
+    }
+    mailer(message)
+
     console.log(req.body.mail)
     const fileName = fileService.saveFile(req.files.photo)
     const post = await Post.create({ userName, phone, mail, photo, inputTextArea, inputCheckbox, order, photo: fileName })
@@ -53,18 +60,11 @@ app.post('/', async (req, res) => {
     res.status(500).json(e)
   }
 })
-const html = `
-<h1> hello
-<p> sent using nodemailer </p>
-</h1>
-`
-const message = {
-  from: 'Test NodeMailer',
-  to: 'andy926@mail.ru',
-  subject: 'testing 1234',
-  text: 'спасибо за заявку'
-}
-mailer(message)
+// const html = `
+// <h1> hello
+// <p> sent using nodemailer </p>
+// </h1>
+// `
     
 
 app.get('/', (req, res) => {
