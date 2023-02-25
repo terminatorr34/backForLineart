@@ -7,8 +7,7 @@ import fileUpload from 'express-fileupload'
 import fileService from './fileService.js'
 import {mailer} from '../back/mailer.js'
 import ejs from 'ejs'
-// process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
-// export fre from 'NODE_TLS_REJECT_UNAUTHORIZED=0'
+
 console.log('hello')
 const PORT = 5501
 const DB_URL = 'mongodb+srv://terminatorr34:Successfull1179!@cluster0.yw45um6.mongodb.net/?retryWrites=true&w=majority'
@@ -542,26 +541,13 @@ app.post('/posts/', async (req, res) => {
       `
     }
     mailer(message)
-
     console.log(req.body.mail)
     const fileName = fileService.saveFile(req.files.photo)
     const post = await Post.create({ userName, phone, mail, photo, inputTextArea, inputCheckbox, order, photo: fileName })
     console.log("---", post);
-    res.json(post)// console.log(req.files);
-    
-    
-    // res.json(req.files)
+    res.json(post)
   }
-
   catch (e) {
     res.status(500).json(e)
   }
-})
-
-    
-
-// app.get('/', (req, res) => {
-//   ejs.render('index')
-// })
-
-
+}) 
