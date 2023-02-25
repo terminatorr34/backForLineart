@@ -2,12 +2,12 @@ import nodeMailer from 'nodemailer'
 
 
   const transporter = nodeMailer.createTransport({
-    host: 'smtp.ethereal.email',
+    host: 'smtp.gmail.com.',
     port: 587,
     secure: false,
     auth: {
-      user: 'samson.dare35@ethereal.email',
-      pass: 'HWXnRCnD4QgSwVpf32'
+      user: 'olimpprint7@gmail.com',
+      pass: 'qkjetlhbeowaxgra'
     },
     tls: {
       // do not fail on invalid certs

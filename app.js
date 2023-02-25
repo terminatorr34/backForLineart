@@ -6,6 +6,8 @@ import cors from 'cors'
 import fileUpload from 'express-fileupload'
 import fileService from './fileService.js'
 import {mailer} from '../back/mailer.js'
+import ejs from 'ejs'
+
 
 // process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
@@ -17,6 +19,7 @@ const PORT = 5501
 const DB_URL = 'mongodb+srv://terminatorr34:Successfull1179!@cluster0.yw45um6.mongodb.net/?retryWrites=true&w=majority'
 const upload = multer({ dest: '/' })
 const app = express()
+app.set ('view engine', 'ejs')
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
@@ -36,13 +39,15 @@ startUP()
 
 app.post('/', async (req, res) => {
   if (!req.body) return res.status(400).json('нет данных')
+  // let result = res.render('index')
   try {
     const { userName, phone, mail, photo, inputTextArea, inputCheckbox, order } = req.body
+    let result = ejs.render('index', {data:{userName:req.body.userName}})
     const message = {
       from: 'Test NodeMailer',
       to: req.body.mail,
       subject: 'testing 1234',
-      text: 'userName: ' + req.body.userName + 'phone: ' + req.body.phone + 'comments: ' + req.body.inputTextArea + 'thank you. we contact you ASAP'
+      text: result
     }
     mailer(message)
 
@@ -51,7 +56,8 @@ app.post('/', async (req, res) => {
     const post = await Post.create({ userName, phone, mail, photo, inputTextArea, inputCheckbox, order, photo: fileName })
     console.log("---", post);
     // console.log(req.files);
-    res.json(post)
+    res.send (post)
+    
     
     // res.json(req.files)
   }
@@ -60,15 +66,11 @@ app.post('/', async (req, res) => {
     res.status(500).json(e)
   }
 })
-// const html = `
-// <h1> hello
-// <p> sent using nodemailer </p>
-// </h1>
-// `
+
     
 
 app.get('/', (req, res) => {
-  res.status(200)
+  ejs.render('index')
 })
 
 
